@@ -1,0 +1,119 @@
+version: "3.7"
+
+services:
+  etl:
+    image: geometrylabs/iconetl:${ICON_ETL_TAG:-latest}
+    command: [
+      "stream",
+      "-o", "kafka:9092",
+      "--period-seconds", "1",
+      "--provider-uri", "http://54.214.27.154:9000/api/v3",
+      "-b", "100",
+    ]
+    depends_on:
+      - kafka
+    restart: on-failure
+
+  ############
+  # Database #
+  ############
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+
+  #########
+  # Kafka #
+  #########
+  zookeeper:
+    image: confluentinc/cp-zookeeper:${CP_ZOOKEEPER_TAG:-latest}
+    hostname: zookeeper
+    environment:
+      zk_id: "1"
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka:
+    image: confluentinc/cp-enterprise-kafka:${CP_ENTERPRISE_KAFKA_TAG:-latest}
+    hostname: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 0
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://kafka:29092
+      KAFKA_BROKER_RACK: "r1"
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_DELETE_TOPIC_ENABLE: "true"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_SCHEMA_REGISTRY_URL: "schemaregistry:8081"
+      KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: "schemaregistry:8081"
+      KAFKA_JMX_PORT: 9991
+      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+      KAFKA_CONFLUENT_SUPPORT_CUSTOMER_ID: anonymous
+      KAFKA_CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CONFLUENT_METRICS_ENABLE: 'true'
+      KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
+
+  schemaregistry:
+    image: confluentinc/cp-schema-registry:${CP_SCHEMA_REGISTRY_TAG:-latest}
+    hostname: schemaregistry
+    container_name: schemaregistry
+    depends_on:
+      - zookeeper
+      - kafka
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schemaregistry
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'
+      SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_ORIGIN: '*'
+      SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_METHODS: 'GET,POST,PUT,OPTIONS'
+      SCHEMA_REGISTRY_LISTENERS: "http://0.0.0.0:8081"
+
+  rest-proxy:
+    image: confluentinc/cp-kafka-rest:${CP_KAFKA_REST_TAG:-latest}
+    hostname: rest-proxy
+    depends_on:
+      - kafka
+      - schemaregistry
+    environment:
+      KAFKA_REST_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_REST_BOOTSTRAP_SERVERS: 'kafka:9092'
+      KAFKA_REST_LISTENERS: 'http://0.0.0.0:8084'
+      KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schemaregistry:8081'
+      KAFKA_REST_HOST_NAME: 'rest-proxy'
+
+  control-center:
+    image: confluentinc/cp-enterprise-control-center:5.5.1
+    hostname: control-center
+    depends_on:
+      - zookeeper
+      - kafka
+    ports:
+      - "9021:9021"
+    environment:
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: 'kafka:29092'
+      CONTROL_CENTER_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      CONTROL_CENTER_REPLICATION_FACTOR: 1
+      CONTROL_CENTER_SCHEMA_REGISTRY_URL: 'schemaregistry:8081'
+      CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
+      CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
+      CONFLUENT_METRICS_TOPIC_REPLICATION: 1
+      PORT: 9021
+    networks:
+      - default
+    restart: always
