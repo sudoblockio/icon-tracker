@@ -4,7 +4,7 @@
 .PHONY: help
 
 tackle-install:  ## Install tackle-box, a helper for managing repo
-	@type tackle -h >/dev/null 2>&1 || pip3 install tackle-box;
+	@if ! tackle -h >/dev/null 2>&1; then pip3 install tackle-box; fi
 
 pull-repos: tackle-install  ## Pull all the underlying repos
 	tackle . --context-file repos.yaml --no-input
