@@ -26,6 +26,10 @@ create-stack:  ## Merge all the sub-repo's docker-compose.yml files into one doc
 	COMPOSE_FILE=./docker-compose.db.yml:./frontend/docker-compose.yml:./blocks/docker-compose.yml \
 	FRONTEND_CONTEXT=./frontend \
 	BLOCKS_CONTEXT=./blocks \
+	TRANSACTIONS_CONTEXT=./transactions \
+#	LOGS_CONTEXT=./logs \
+	CONTRACTS_CONTEXT=./contracts \
+	ACCOUNTS_CONTEXT=./accounts \
 	docker-compose \
     config > docker-stack.yml
 
@@ -34,6 +38,10 @@ create-stack-persist:  ## Same as create-stack but with persisting data in a loc
 	COMPOSE_FILE=./docker-compose.db.yml:./docker-compose.db.persist.yml:./frontend/docker-compose.yml:./blocks/docker-compose.yml \
 	FRONTEND_CONTEXT=./frontend \
 	BLOCKS_CONTEXT=./blocks \
+	TRANSACTIONS_CONTEXT=./transactions \
+#	LOGS_CONTEXT=./logs \
+	CONTRACTS_CONTEXT=./contracts \
+	ACCOUNTS_CONTEXT=./accounts \
 	docker-compose \
     config > docker-stack.yml
 

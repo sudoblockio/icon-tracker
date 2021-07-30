@@ -73,7 +73,6 @@ services:
   schemaregistry:
     image: confluentinc/cp-schema-registry:${CP_SCHEMA_REGISTRY_TAG:-latest}
     hostname: schemaregistry
-    container_name: schemaregistry
     depends_on:
       - zookeeper
       - kafka

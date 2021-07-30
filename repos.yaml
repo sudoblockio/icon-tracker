@@ -9,8 +9,8 @@ repos:
     # Backend
     blocks: icon-blocks
     transactions: icon-transactions
-#    accounts: icon-accounts
-#    contracts: icon-contracts
+    accounts: icon-accounts
+    contracts: icon-contracts
 #    tokens: icon-tokens
 #    logs: icon-logs
 

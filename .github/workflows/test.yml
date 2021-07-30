@@ -21,7 +21,7 @@ jobs:
         with:
           install: true
 
-      - name: Bring up the stack
+      - name: Pull the sub repos
         run: make pull-repos
 
       - name: Bring up the stack
