@@ -3,7 +3,7 @@ repos:
   git_org: geometry-labs
   repo_tree:
 
-    # Frontend
+    # Frontend - private
     frontend: icon-tracker-frontend
 
     # Backend
@@ -11,10 +11,10 @@ repos:
     transactions: icon-transactions
     accounts: icon-accounts
     contracts: icon-contracts
+    logs: icon-logs
 #    tokens: icon-tokens
-#    logs: icon-logs
 
     etl: icon-etl
 
-    # Prior backend
+    # Prior backend - private
     .backend: icon-tracker-backend
