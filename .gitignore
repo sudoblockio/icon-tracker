@@ -2,12 +2,22 @@ frontend
 blocks
 transactions
 accounts
+addresses
 contracts
+governance
+load-tests
+icon-tracker-backend
 tokens
 logs
+metrics
 etl
+network-exporter
+
 volumes
+
+# Old
 .backend
+.old
 
 docker-stack.yml
 

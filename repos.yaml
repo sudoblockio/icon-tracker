@@ -9,12 +9,17 @@ repos:
     # Backend
     blocks: icon-blocks
     transactions: icon-transactions
-    accounts: icon-accounts
+    addresses: icon-addresses
     contracts: icon-contracts
+    governance: icon-governance
     logs: icon-logs
 #    tokens: icon-tokens
 
+    exporter: icon-network-exporter
+
     etl: icon-etl
+
+    load-tests: icon-explorer-load-tests
 
     # Prior backend - private
     .backend: icon-tracker-backend
