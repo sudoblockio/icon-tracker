@@ -6,9 +6,12 @@ Meta repo for ICON Blockchain Explorer. For testing purposes and local developme
 
 ### Sub Repos 
 
-- [Metrics](https://github.com/geometry-labs/icon-metrics)
 - [ETL](https://github.com/geometry-labs/icon-etl)
+    - Main indexer for the blockchain 
 - [Network Exporter](https://github.com/geometry-labs/icon-network-exporter)
+    - Scraper for various metrics across the nodes that run the network
+- [Metrics](https://github.com/geometry-labs/icon-metrics)
+    - Microservice that serves a REST endpoint for random metrics
 - [Frontend](https://github.com/geometry-labs/icon-tracker-frontend)
     - To be made public after launch 
 
@@ -16,12 +19,14 @@ Meta repo for ICON Blockchain Explorer. For testing purposes and local developme
 
 All data from the blockchain is normalized into the following microservices.
 
-- [Blocks](https://github.com/geometry-labs/icon-blocks)
-- [Transactions](https://github.com/geometry-labs/icon-transactions)
-- [Logs](https://github.com/geometry-labs/icon-logs)
-- [Addresses](https://github.com/geometry-labs/icon-addresses)
-- [Contracts](https://github.com/geometry-labs/icon-contracts)
-- [Governance](https://github.com/geometry-labs/icon-governance)
+| Service | Version | Build Status | 
+| :--- | :---- | :---- |
+| [Blocks](https://github.com/geometry-labs/icon-blocks) | [![GitHub Release](https://img.shields.io/github/release/geometry-labs/icon-governance.svg?style=flat)]() | ![](https://github.com/geometry-labs/icon-governance/workflows/push-main/badge.svg?branch=main) | 
+| [Transactions](https://github.com/geometry-labs/icon-transactions) | [![GitHub Release](https://img.shields.io/github/release/geometry-labs/icon-transactions.svg?style=flat)]() | ![](https://github.com/geometry-labs/icon-transactions/workflows/push-main/badge.svg?branch=main) | 
+| [Logs](https://github.com/geometry-labs/icon-logs) | [![GitHub Release](https://img.shields.io/github/release/geometry-labs/icon-logs.svg?style=flat)]() | ![](https://github.com/geometry-labs/icon-logs/workflows/push-main/badge.svg?branch=main) |
+| [Addresses](https://github.com/geometry-labs/icon-addresses) | [![GitHub Release](https://img.shields.io/github/release/geometry-labs/icon-addresses.svg?style=flat)]() | ![](https://github.com/geometry-labs/icon-addresses/workflows/push-main/badge.svg?branch=main) |
+| [Contracts](https://github.com/geometry-labs/icon-contracts) | [![GitHub Release](https://img.shields.io/github/release/geometry-labs/icon-contracts.svg?style=flat)]() | ![](https://github.com/geometry-labs/icon-contracts/workflows/push-main/badge.svg?branch=main)
+| [Governance](https://github.com/geometry-labs/icon-governance) | [![GitHub Release](https://img.shields.io/github/release/geometry-labs/icon-governance.svg?style=flat)]() | ![](https://github.com/geometry-labs/icon-governance/workflows/push-main/badge.svg?branch=main)
 
 ## Usage 
 
