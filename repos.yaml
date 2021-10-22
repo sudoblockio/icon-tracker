@@ -15,7 +15,8 @@ repos:
     logs: icon-logs
 #    tokens: icon-tokens
 
-    exporter: icon-network-exporter
+    network-exporter: icon-network-exporter
+    status-page: icon-status-page
 
     etl: icon-etl
 

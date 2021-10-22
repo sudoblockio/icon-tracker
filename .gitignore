@@ -12,6 +12,9 @@ logs
 metrics
 etl
 network-exporter
+infra
+charts
+status-page
 
 volumes
 
