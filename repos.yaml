@@ -9,11 +9,11 @@ repos:
     # Backend
     blocks: icon-blocks
     transactions: icon-transactions
+    logs: icon-logs
     addresses: icon-addresses
     contracts: icon-contracts
     governance: icon-governance
-    logs: icon-logs
-#    tokens: icon-tokens
+    metrics: icon-metrics
 
     network-exporter: icon-network-exporter
     status-page: icon-status-page
