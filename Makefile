@@ -25,21 +25,22 @@ create-stack:  ## Merge all the sub-repo's docker-compose.yml files into one doc
 	COMPOSE_FILE_SEPARATOR=: \
 	COMPOSE_FILE=./docker-compose.db.yml:./blocks/docker-compose.yml:./transactions/docker-compose.yml:./contracts/docker-compose.yml:./addresses/docker-compose.yml:./logs/docker-compose.yml:./governance/docker-compose.yml \
 	BLOCKS_CONTEXT=./blocks \
+	LOGS_CONTEXT=./logs \
 	TRANSACTIONS_CONTEXT=./transactions \
 	CONTRACTS_CONTEXT=./contracts \
 	ADDRESSES_CONTEXT=./addresses \
-	LOGS_CONTEXT=./logs \
 	GOVERNANCE_CONTEXT=./governance \
 	docker-compose \
     config > docker-stack.yml
 
 create-stack-persist:  ## Same as create-stack but with persisting data in a local volume for longer operation
-	COMPOSE_FILE=./docker-compose.db.yml:./docker-compose.db.persist.yml:./blocks/docker-compose.yml:./transactions/docker-compose.yml:./contracts/docker-compose.yml:./addresses/docker-compose.yml:./logs/docker-compose.yml \
+	COMPOSE_FILE=./docker-compose.db.yml:./docker-compose.db.persist.yml:./blocks/docker-compose.yml:./transactions/docker-compose.yml:./contracts/docker-compose.yml:./addresses/docker-compose.yml:./logs/docker-compose.yml:./governance/docker-compose.yml \
 	BLOCKS_CONTEXT=./blocks \
 	TRANSACTIONS_CONTEXT=./transactions \
-	CONTRACTS_CONTEXT=./contracts \
-	ADDRESSES_CONTEXT=./addresses \
 	LOGS_CONTEXT=./logs \
+	ADDRESSES_CONTEXT=./addresses \
+	CONTRACTS_CONTEXT=./contracts \
+	GOVERNANCE_CONTEXT=./governance \
 	docker-compose \
     config > docker-stack.yml
 

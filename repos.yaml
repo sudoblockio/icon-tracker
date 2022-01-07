@@ -1,5 +1,5 @@
 repos:
-  type: meta_repo
+  ->: meta_repo
   git_org: geometry-labs
   repo_tree:
 
