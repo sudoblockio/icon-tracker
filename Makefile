@@ -7,7 +7,7 @@ tackle-install:  ## Install tackle-box, a helper for managing repo
 	@if ! tackle -h >/dev/null 2>&1; then pip3 install tackle-box; fi
 
 pull-repos: tackle-install  ## Pull all the underlying repos
-	tackle . --context-file repos.yaml --no-input
+	tackle repos.yaml --no-input
 
 up: create-stack  ## Bring up the stack
 	docker-compose -f docker-stack.yml up -d;
