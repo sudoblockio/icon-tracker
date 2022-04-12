@@ -16,6 +16,11 @@ infra
 charts
 status-page
 
+#v2
+extractor
+transformer
+api
+
 volumes
 
 # Old
