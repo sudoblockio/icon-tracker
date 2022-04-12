@@ -1,26 +1,17 @@
 repos:
   ->: meta_repo
-  git_org: geometry-labs
+  git_org: sudoblockio
   repo_tree:
 
-    # Frontend - private
     frontend: icon-tracker-frontend
 
-    # Backend
-    blocks: icon-blocks
-    transactions: icon-transactions
-    logs: icon-logs
-    addresses: icon-addresses
+    # v2
+    extractor: icon-extractor
+    transformer: icon-transformer
+    api: icon-go-api
+
+    # v1
+    etl: icon-etl
     contracts: icon-contracts
     governance: icon-governance
     metrics: icon-metrics
-
-    network-exporter: icon-network-exporter
-    status-page: icon-status-page
-
-    etl: icon-etl
-
-    load-tests: icon-explorer-load-tests
-
-    # Prior backend - private
-    .backend: icon-tracker-backend

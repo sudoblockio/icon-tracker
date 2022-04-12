@@ -21,22 +21,24 @@ ps:  ## Check the containers
 logs:  ## Get the logs from the runnning services
 	docker-compose -f docker-stack.yml logs;
 
-create-stack:  ## Merge all the sub-repo's docker-compose.yml files into one docker-stack.yml file
+create-v2:  ## Merge all the sub-repo's docker-compose.yml files into one docker-stack.yml file
+ifeq (,$(wildcard .env))
+	export $(cat .env | xargs)
+endif
 	COMPOSE_FILE_SEPARATOR=: \
-	COMPOSE_FILE=./docker-compose.db.yml:./blocks/docker-compose.yml:./transactions/docker-compose.yml:./contracts/docker-compose.yml:./addresses/docker-compose.yml:./logs/docker-compose.yml:./governance/docker-compose.yml \
-	BLOCKS_CONTEXT=./blocks \
-	LOGS_CONTEXT=./logs \
-	TRANSACTIONS_CONTEXT=./transactions \
+	COMPOSE_FILE=./docker-compose.db.yml:./extractor/docker-compose.yml:./transformer/docker-compose.yml:./api/docker-compose.yml:./contracts/docker-compose.yml:./governance/docker-compose.yml \
+	EXTRACTOR_CONTEXT=./extractor \
+	TRANSFORMER_CONTEXT=./transformer \
+	API_CONTEXT=./api \
 	CONTRACTS_CONTEXT=./contracts \
-	ADDRESSES_CONTEXT=./addresses \
 	GOVERNANCE_CONTEXT=./governance \
 	docker-compose \
     config > docker-stack.yml
 
-create-stack-persist:  ## Same as create-stack but with persisting data in a local volume for longer operation
-	COMPOSE_FILE=./docker-compose.db.yml:./docker-compose.db.persist.yml:./blocks/docker-compose.yml:./transactions/docker-compose.yml:./contracts/docker-compose.yml:./addresses/docker-compose.yml:./logs/docker-compose.yml:./governance/docker-compose.yml \
+create-v1:  ## Same as create-stack but with persisting data in a local volume for longer operation
+	COMPOSE_FILE=./docker-compose.db.yml:./docker-compose.db.persist.yml:./blocks/docker-compose.yml:./transformer/docker-compose.yml:./contracts/docker-compose.yml:./addresses/docker-compose.yml:./logs/docker-compose.yml:./governance/docker-compose.yml \
 	BLOCKS_CONTEXT=./blocks \
-	TRANSACTIONS_CONTEXT=./transactions \
+	TRANSFORMER_CONTEXT=./transformer \
 	LOGS_CONTEXT=./logs \
 	ADDRESSES_CONTEXT=./addresses \
 	CONTRACTS_CONTEXT=./contracts \

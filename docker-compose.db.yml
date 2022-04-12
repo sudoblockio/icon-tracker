@@ -1,18 +1,26 @@
 version: "3.7"
 
 services:
-  etl:
-    image: geometrylabs/iconetl:${ICON_ETL_TAG:-latest}
-    command: [
-      "stream",
-      "-o", "kafka:9092",
-      "--period-seconds", "1",
-      "--provider-uri", "https://icon.geometry-dev.net/api/v3",
-      "-b", "100",
-    ]
-    depends_on:
-      - kafka
-    restart: on-failure
+#  etl:
+##    image: geometrylabs/iconetl:${ICON_ETL_TAG:-latest}
+#    build:
+#      context: etl
+#      target: prod
+#
+#    command: [
+#      "stream",
+#      "-o", "kafka:9092",
+#      "-s", "${START_BLOCK:-36980302}",
+#      "--period-seconds", "1",
+#      "--provider-uri", "https://api.icon.geometry.io/api/v3",
+##      "--provider-uri", "https://ctz.solidwallet.io/api/v3",
+#      "--kafka-schema-registry-url", "http://schemaregistry:8081",
+#      "--kafka-use-schema-registry", "true",
+##      "-b", "100",
+#    ]
+#    depends_on:
+#      - kafka
+#    restart: on-failure
 
   ############
   # Database #
@@ -23,15 +31,17 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
     ports:
-      - "5432:5432"
+      - "5432:${POSTGRES_EXTERNAL_PORT:-5432}"
+    volumes:
+      - ${DB_CONTEXT:-.}/volumes/postgres:/data/postgres
 
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-    ports:
-      - "${PGADMIN_PORT:-5050}:80"
+#  pgadmin:
+#    image: dpage/pgadmin4
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+#      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+#    ports:
+#      - "${PGADMIN_PORT:-5050}:80"
 
   #########
   # Kafka #

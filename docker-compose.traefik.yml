@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+  logs-api:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.websocket-api.rule=Host(`balanced.geometry.io`) || Host(`a.balanced.geometry.io`) || Host(`b.balanced.geometry.io`) || Host(`yeouido.balanced.geometry-dev.net`) && PathPrefix(`/ws`)"
+      - "traefik.http.routers.websocket-api.entrypoints=websecure"
+      - "traefik.http.routers.websocket-api.tls=true"
+      - "traefik.webservice.frontend.entryPoints=https,wss,http,ws"
+      - "traefik.port=3000"
