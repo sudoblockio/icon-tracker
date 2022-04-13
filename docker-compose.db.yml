@@ -1,26 +1,6 @@
 version: "3.7"
 
 services:
-#  etl:
-##    image: geometrylabs/iconetl:${ICON_ETL_TAG:-latest}
-#    build:
-#      context: etl
-#      target: prod
-#
-#    command: [
-#      "stream",
-#      "-o", "kafka:9092",
-#      "-s", "${START_BLOCK:-36980302}",
-#      "--period-seconds", "1",
-#      "--provider-uri", "https://api.icon.geometry.io/api/v3",
-##      "--provider-uri", "https://ctz.solidwallet.io/api/v3",
-#      "--kafka-schema-registry-url", "http://schemaregistry:8081",
-#      "--kafka-use-schema-registry", "true",
-##      "-b", "100",
-#    ]
-#    depends_on:
-#      - kafka
-#    restart: on-failure
 
   ############
   # Database #
@@ -31,17 +11,9 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
     ports:
-      - "5432:${POSTGRES_EXTERNAL_PORT:-5432}"
+        - "${POSTGRES_EXTERNAL_PORT:-5432}:5432"
     volumes:
       - ${DB_CONTEXT:-.}/volumes/postgres:/data/postgres
-
-#  pgadmin:
-#    image: dpage/pgadmin4
-#    environment:
-#      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-#      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-#    ports:
-#      - "${PGADMIN_PORT:-5050}:80"
 
   #########
   # Kafka #
@@ -63,7 +35,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://kafka:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
       KAFKA_BROKER_RACK: "r1"
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
@@ -79,6 +51,9 @@ services:
       KAFKA_CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_CONFLUENT_METRICS_ENABLE: 'true'
       KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
+    ports:
+      - "9092:9092"
+      - "29092:29092"
 
   schemaregistry:
     image: confluentinc/cp-schema-registry:${CP_SCHEMA_REGISTRY_TAG:-latest}
@@ -126,3 +101,11 @@ services:
     networks:
       - default
     restart: always
+
+  #########
+  # Redis #
+  #########
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"

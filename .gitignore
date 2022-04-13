@@ -15,6 +15,9 @@ network-exporter
 infra
 charts
 status-page
+api/
+extractor/
+transformer/
 
 #v2
 extractor

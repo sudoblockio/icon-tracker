@@ -9,7 +9,7 @@ tackle-install:  ## Install tackle-box, a helper for managing repo
 pull-repos: tackle-install  ## Pull all the underlying repos
 	tackle repos.yaml --no-input
 
-up: create-stack  ## Bring up the stack
+up: create-v2  ## Bring up the stack
 	docker-compose -f docker-stack.yml up -d;
 
 down:  ## Take down the
