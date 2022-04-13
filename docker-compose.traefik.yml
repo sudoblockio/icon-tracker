@@ -27,7 +27,7 @@ services:
   api:
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.rest-api.rule=Host(`mainnet.sudoblock.io`) && PathPrefix(`/api/v1`)"
+      - "traefik.http.routers.rest-api.rule=Host(`${HOST_URL}`) && PathPrefix(`/api/v1`)"
       - "traefik.http.routers.rest-api.entrypoints=websecure"
       - "traefik.http.routers.rest-api.tls=true"
       - "traefik.webservice.frontend.entryPoints=https,wss,http,ws"
