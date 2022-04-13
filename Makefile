@@ -26,7 +26,7 @@ ifeq (,$(wildcard .env))
 	export $(cat .env | xargs)
 endif
 	COMPOSE_FILE_SEPARATOR=: \
-	COMPOSE_FILE=./docker-compose.db.yml:./extractor/docker-compose.yml:./transformer/docker-compose.yml:./api/docker-compose.yml:./contracts/docker-compose.yml:./governance/docker-compose.yml \
+	COMPOSE_FILE=./docker-compose.db.yml:./docker-compose.traefik.yml:./extractor/docker-compose.yml:./transformer/docker-compose.yml:./api/docker-compose.yml:./contracts/docker-compose.yml:./governance/docker-compose.yml \
 	EXTRACTOR_CONTEXT=./extractor \
 	TRANSFORMER_CONTEXT=./transformer \
 	API_CONTEXT=./api \

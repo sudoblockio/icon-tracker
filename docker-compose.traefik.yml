@@ -1,11 +1,33 @@
 version: "3.7"
 
 services:
-  logs-api:
+  traefik:
+    image: traefik:${TRAEFIK_TAG:-v2.4}
+    container_name: "traefik"
+    hostname: "traefik"
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.websecure.address=:443"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./dynamic/certs-traefik.yaml:/etc/traefik/dynamic/certs-traefik.yaml"
+      - "./ssl:/etc/certs"
+
+  extractor:
+    network_mode: host
+
+  api:
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.websocket-api.rule=Host(`balanced.geometry.io`) || Host(`a.balanced.geometry.io`) || Host(`b.balanced.geometry.io`) || Host(`yeouido.balanced.geometry-dev.net`) && PathPrefix(`/ws`)"
-      - "traefik.http.routers.websocket-api.entrypoints=websecure"
-      - "traefik.http.routers.websocket-api.tls=true"
+      - "traefik.http.routers.rest-api.rule=Host(`mainnet.sudoblock.io`) && PathPrefix(`/api/v1`)"
+      - "traefik.http.routers.rest-api.entrypoints=websecure"
+      - "traefik.http.routers.rest-api.tls=true"
       - "traefik.webservice.frontend.entryPoints=https,wss,http,ws"
-      - "traefik.port=3000"
