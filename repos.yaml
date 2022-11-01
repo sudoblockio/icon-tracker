@@ -2,16 +2,9 @@ repos:
   ->: meta_repo
   git_org: sudoblockio
   repo_tree:
-
     frontend: icon-tracker-frontend
-
-    # v2
     extractor: icon-extractor
     transformer: icon-transformer
     api: icon-go-api
-
-    # v1
-    etl: icon-etl
     contracts: icon-contracts
     governance: icon-governance
-    metrics: icon-metrics
