@@ -2,8 +2,10 @@
 
 The documents linked here outline major endeavors to the tracker, both the backend and front. If a major feature is requested, it should be included in this document which will then be broken up into individual tasks laid out in GH issues. 
 
-- [Backend](./backend-planning.md)
-- [Frontend](./frontend-planning.md)
+- [Frontend](./frontend.md)
+- [Backend](./backend.md)
+- [Infrastructure](./infra.md)
+- [Miscellaneous](./miscellaneous.md)
 
 ### Report Generation 
 
