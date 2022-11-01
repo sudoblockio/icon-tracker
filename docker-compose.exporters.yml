@@ -1,0 +1,32 @@
+version: "3.7"
+
+services:
+  postgres-exporter:
+    image: wrouesnel/postgres_exporter:latest
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      - DATA_SOURCE_NAME=postgresql://postgres:${POSTGRES_PASSWORD:-changeme}@postgres:5432/postgres?sslmode=disable
+    ports:
+      - "${POSTGRES_EXPORTER_EXTERNAL_PORT:-9187}:9187"
+
+  kafka-exporter:
+    image: danielqsj/kafka-exporter
+    restart: always
+    depends_on:
+      - kafka
+    command:
+      - --kafka.server=kafka:9092
+    ports:
+      - "${KAFKA_EXPORTER_EXTERNAL_PORT:-9308}:9308"
+
+  node-exporter:
+    image: bitnami/node-exporter:latest
+    ports:
+      - "${NODE_EXPORTER_EXTERNAL_PORT:-9100}:9100"
+    restart: always
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro

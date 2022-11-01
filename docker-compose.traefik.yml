@@ -6,28 +6,61 @@ services:
     container_name: "traefik"
     hostname: "traefik"
     command:
+      - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
-      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
       - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=${ACME_EMAIL}"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
       - "80:80"
       - "443:443"
       - "8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./dynamic/certs-traefik.yaml:/etc/traefik/dynamic/certs-traefik.yaml"
-      - "./ssl:/etc/certs"
+      - "./certs:/letsencrypt"
 
-  extractor:
-    network_mode: host
+  frontend:
+    image: sudoblock/icon-tracker-frontend:latest
+    expose:
+      - 8080
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`${HOSTNAME}`) && PathPrefix(`/`)"
+      - "traefik.http.services.frontend.loadbalancer.server.port=8080"
+      - "traefik.http.routers.frontend.priority=1"
+      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
+      - "traefik.http.routers.frontend.tls=true"
 
   api:
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.rest-api.rule=Host(`${HOST_URL}`) && PathPrefix(`/api/v1`)"
+      - "traefik.http.routers.rest-api.rule=Host(`${HOSTNAME}`) && PathPrefix(`/api/v1`) || PathPrefix(`/ws/v1`)"
       - "traefik.http.routers.rest-api.entrypoints=websecure"
+      - "traefik.http.routers.rest-api.priority=4"
+      - "traefik.webservice.rest-api.entryPoints=https,wss,http,ws"
+      - "traefik.http.routers.rest-api.tls.certresolver=myresolver"
       - "traefik.http.routers.rest-api.tls=true"
-      - "traefik.webservice.frontend.entryPoints=https,wss,http,ws"
+
+  contracts-api:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.contracts-api.rule=Host(`${HOSTNAME}`) && PathPrefix(`/api/v1/contracts`)"
+      - "traefik.http.routers.contracts-api.entrypoints=websecure"
+      - "traefik.http.services.contracts-api.loadbalancer.server.port=8001"
+      - "traefik.http.routers.contracts-api.priority=5"
+      - "traefik.webservice.contracts-api.entryPoints=https,wss,http,ws"
+      - "traefik.http.routers.contracts-api.tls.certresolver=myresolver"
+
+  governance-api:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.governance-api.rule=Host(`${HOSTNAME}`) && (PathPrefix(`/api/v1/governance`) || PathPrefix(`/api/v1/preps`)) "
+      - "traefik.http.routers.governance-api.entrypoints=websecure"
+      - "traefik.http.services.governance-api.loadbalancer.server.port=8002"
+      - "traefik.http.routers.governance-api.priority=6"
+      - "traefik.webservice.governance-api.entryPoints=https,wss,http,ws"
+      - "traefik.http.routers.governance-api.tls.certresolver=myresolver"

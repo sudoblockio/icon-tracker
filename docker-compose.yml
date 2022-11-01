@@ -1,0 +1,249 @@
+version: "3.7"
+
+x-extractor-env: &extractor-env
+  API_PORT: "9876"
+  LOG_LEVEL: "INFO"
+  LOG_FORMAT: "console"
+
+  # Icon node service
+  ICON_NODE_SERVICE_URL: "${ICON_NODE_SERVICE_URL:-https://api.icon.community/api/v3}" # Mainnet
+
+  # Kafka
+  KAFKA_BROKER_URL: "kafka:9092"
+  KAFKA_BLOCKS_TOPIC: "icon-${NETWORK_NAME:-mainnet}-blocks-v2"
+  KAFKA_PRODUCER_PARTITIONS: "12"
+  KAFKA_DEAD_MESSAGE_TOPIC: "icon-${NETWORK_NAME:-mainnet}-blocks-v2-dead"
+
+  # Postgres
+  DB_DRIVER: "postgres"
+  DB_HOST: "postgres"
+  DB_PORT: "5432"
+  DB_USER: "${DB_USER:-icon}"
+  DB_PASSWORD: "${DB_PASSWORD}"
+  DB_DBNAME: "${NETWORK_NAME:-mainnet}_extractor_v2"
+  DB_SSL_MODE: "disable"
+  DB_TIMEZONE: "UTC"
+
+x-transformer-env: &transformer-env
+  # Logging
+  LOG_LEVEL: "INFO"
+  LOG_FORMAT: "console"
+
+  # Icon node service
+  ICON_NODE_SERVICE_URL: "https://ctz.solidwallet.io/api/v3" # Mainnet
+
+  # Kakfa
+  KAFKA_BROKER_URL: "kafka:9092"
+  KAFKA_BLOCKS_TOPIC: "icon-${NETWORK_NAME:-mainnet}-blocks-v2"
+  KAFKA_CONTRACTS_TOPIC: "icon-${NETWORK_NAME:-mainnet}-contracts-v2"
+  KAFKA_DEAD_MESSAGE_TOPIC: "icon-${NETWORK_NAME:-mainnet}-blocks-v2-dead"
+
+  # Consumer group
+  CONSUMER_GROUP: "icon-${NETWORK_NAME:-mainnet}-v2"
+
+  # DB
+  DB_DRIVER: "postgres"
+  DB_HOST: "postgres"
+  DB_PORT: "5432"
+  DB_USER: "${DB_USER:-icon}"
+  DB_PASSWORD: "${DB_PASSWORD}"
+  DB_DBNAME: "${NETWORK_NAME:-mainnet}_transformer_v2"
+  DB_SSL_MODE: "disable"
+  DB_TIMEZONE: "UTC"
+
+  # Redis
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  REDIS_PASSWORD: ""
+  REDIS_KEY_PREFIX: "icon_${NETWORK_NAME:-mainnet}_v2_"
+  REDIS_BLOCKS_CHANNEL: "icon_${NETWORK_NAME:-mainnet}_v2_blocks"
+  REDIS_TRANSACTIONS_CHANNEL: "icon_${NETWORK_NAME:-mainnet}_v2_transactions"
+  REDIS_LOGS_CHANNEL: "icon_${NETWORK_NAME:-mainnet}_v2_logs"
+  REDIS_TOKEN_TRANSFERS_CHANNEL: "icon_${NETWORK_NAME:-mainnet}_v2_token_transfers"
+
+x-api-env: &api-env
+  # Ports
+  API_PORT: "8000"
+
+  # Logging
+  LOG_LEVEL: "INFO"
+  LOG_FORMAT: "console"
+
+  # CORS
+  CORS_ALLOW_ORIGINS: "*"
+  CORS_ALLOW_HEADERS: "*"
+  CORS_ALLOW_METHODS: "GET,POST,HEAD,PUT,DELETE,PATCH"
+  CORS_EXPOSE_HEADERS: "*"
+
+  # DB
+  DB_DRIVER: "postgres"
+  DB_HOST: "postgres"
+  DB_PORT: "5432"
+  DB_USER: "${DB_USER:-icon}"
+  DB_PASSWORD: "${DB_PASSWORD}"
+  DB_DBNAME: "${NETWORK_NAME:-mainnet}_transformer_v2"
+  DB_SSL_MODE: "disable"
+  DB_TIMEZONE: "UTC"
+
+  # Redis
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  REDIS_PASSWORD: ""
+  REDIS_KEY_PREFIX: "icon_${NETWORK_NAME:-mainnet}_v2_"
+  REDIS_BLOCKS_CHANNEL: "icon_${NETWORK_NAME:-mainnet}_v2_blocks"
+  REDIS_TRANSACTIONS_CHANNEL: "icon_${NETWORK_NAME:-mainnet}_v2_transactions"
+  REDIS_LOGS_CHANNEL: "icon_${NETWORK_NAME:-mainnet}_v2_logs"
+  REDIS_TOKEN_TRANSFERS_CHANNEL: "icon_${NETWORK_NAME:-mainnet}_v2_token_transfers"
+
+
+x-contracts-env: &contracts-env
+  NAME: "contracts"
+  NETWORK_NAME: "${NETWORK_NAME:-mainnet}"
+  # Ports
+  PORT: "8001"
+  METRICS_PORT: "9401"
+  # Prefix
+  REST_PREFIX: "/api/v1"
+  HEALTH_PREFIX: "/health"
+  METRICS_PREFIX: "/metrics"
+  CORS_ALLOW_ORIGINS: "*"
+  # Kafka
+  KAFKA_BROKER_URL: "kafka:9092"
+  CONSUMER_GROUP: "contracts-consumer-group"
+  CONSUMER_TOPIC_BLOCKS: "icon-${NETWORK_NAME:-mainnet}-blocks-v2"
+  PRODUCER_TOPIC_CONTRACTS: "icon-${NETWORK_NAME:-mainnet}-contracts-v2"
+  CONSUMER_AUTO_OFFSET_RESET: "earliest"
+  # DB
+  POSTGRES_USER: "${DB_USER}"
+  POSTGRES_PASSWORD: "${DB_PASSWORD}"
+  POSTGRES_SERVER: "postgres"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DATABASE: "${NETWORK_NAME:-mainnet}_contracts_v2"
+  # Endpoints
+  MAX_PAGE_SIZE: "100"
+  # Application features
+  ENABLE_CONTRACT_VERIFICATION: "false"
+
+x-governance-env: &governance-env
+  NAME: "governance"
+  NETWORK_NAME: "${NETWORK_NAME:-mainnet}"
+  # Ports
+  PORT: "8002"
+  METRICS_PORT: "9402"
+  # Prefix
+  REST_PREFIX: "/api/v1"
+  HEALTH_PREFIX: "/health"
+  METRICS_PREFIX: "/metrics"
+  CORS_ALLOW_ORIGINS: "*"
+  # Kafka
+  KAFKA_BROKER_URL: "kafka:9092"
+  CONSUMER_GROUP: "governance-consumer-group"
+  CONSUMER_TOPIC_BLOCKS: "icon-${NETWORK_NAME:-mainnet}-blocks-v2"
+  # DB
+  POSTGRES_USER: "${DB_USER}"
+  POSTGRES_PASSWORD: "${DB_PASSWORD}"
+  POSTGRES_SERVER: "postgres"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DATABASE: "${NETWORK_NAME:-mainnet}_governance_v2"
+  # Endpoints
+  MAX_PAGE_SIZE: "100"
+
+
+services:
+  claim-extractor:
+    image: sudoblock/icon-extractor:latest
+    restart: always
+#    ports:
+#      - "9876:9876"
+    deploy:
+      replicas: 8
+    environment:
+      <<: *extractor-env
+      START_CLAIM_EXTRACTORS: "true"
+      NUM_CLAIM_EXTRACTORS: "16"
+      MAX_CLAIM_SIZE: "1000"
+      START_HEAD_EXTRACTOR: "false"
+      INSERT_EXTRACTOR_JOB: "true"
+      INSERT_EXTRACTOR_JOB_START_BLOCK_NUMBER: "1"
+      ICON_NODE_SERVICE_MAX_BATCH_SIZE: "10"
+      INSERT_EXTRACTOR_JOB_END_BLOCK_NUMBER: "48900000"
+      # TODO: Update
+      INSERT_EXTRACTOR_JOB_HASH: "SEJONG_FIREHOSE_1"
+
+  head-extractor:
+    image: sudoblock/icon-extractor:latest
+    restart: always
+    deploy:
+      replicas: 1 # NOTE never run more than 1 head extractor
+    environment:
+      <<: *extractor-env
+      START_CLAIM_EXTRACTORS: "false"
+      START_HEAD_EXTRACTOR: "true"
+      HEAD_EXTRACTOR_START_BLOCK: "48900000"
+      INSERT_EXTRACTOR_JOB: "false"
+      ICON_NODE_SERVICE_MAX_BATCH_SIZE: "1"
+
+  transformer:
+    image: sudoblock/icon-transformer:latest
+    restart: always
+    environment:
+      <<: *transformer-env
+      ROUTINES_RUN_ONLY: "false"
+
+  transformer-routine:
+    image: sudoblock/icon-transformer:latest
+    restart: always
+    environment:
+      <<: *transformer-env
+      ROUTINES_RUN_ONLY: "true"
+      ROUTINES_SLEEP_DURATION: "1h"
+
+  api:
+    image: sudoblock/icon-go-api:latest
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      <<: *api-env
+
+  contracts-worker:
+    image: sudoblock/icon-contracts-worker:latest
+    restart: always
+    environment:
+      <<: *contracts-env
+
+  contracts-api:
+    image: sudoblock/icon-contracts-api:latest
+    restart: always
+    ports:
+      - "8001:8001"
+    environment:
+      <<: *contracts-env
+
+  governance-worker:
+    image: sudoblock/icon-governance-worker:latest
+    restart: always
+    command:
+      - worker
+      - head
+    environment:
+      <<: *governance-env
+
+  governance-cron:
+    image: sudoblock/icon-governance-worker:latest
+    restart: always
+    command:
+      - worker
+      - cron
+    environment:
+      <<: *governance-env
+
+  governance-api:
+    image: sudoblock/icon-governance-api:latest
+    restart: always
+    command:
+      - api
+    ports:
+      - "8002:8002"
+    environment:
+      <<: *governance-env
