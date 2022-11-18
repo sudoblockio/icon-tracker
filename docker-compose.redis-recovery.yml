@@ -1,0 +1,34 @@
+version: "3.7"
+
+x-transformer-env: &transformer-env
+  # Logging
+  LOG_LEVEL: "INFO"
+  LOG_FORMAT: "console"
+
+  # DB
+  DB_DRIVER: "postgres"
+  DB_HOST: "postgres"
+  DB_PORT: "5432"
+  DB_USER: "${DB_USER:-icon}"
+  DB_PASSWORD: "${DB_PASSWORD}"
+  DB_DBNAME: "${NETWORK_NAME:-mainnet}_transformer_v2"
+  DB_SSL_MODE: "disable"
+  DB_TIMEZONE: "UTC"
+
+  # Redis
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  REDIS_PASSWORD: ""
+  REDIS_KEY_PREFIX: "icon_${NETWORK_NAME:-mainnet}_v2_"
+  REDIS_BLOCKS_CHANNEL: "icon_${NETWORK_NAME:-mainnet}_v2_blocks"
+  REDIS_TRANSACTIONS_CHANNEL: "icon_${NETWORK_NAME:-mainnet}_v2_transactions"
+  REDIS_LOGS_CHANNEL: "icon_${NETWORK_NAME:-mainnet}_v2_logs"
+  REDIS_TOKEN_TRANSFERS_CHANNEL: "icon_${NETWORK_NAME:-mainnet}_v2_token_transfers"
+
+services:
+  transformer-redis-recovery:
+    image: sudoblock/icon-transformer:latest
+    restart: always
+    environment:
+      <<: *transformer-env
+      REDIS_RECOVERY_RUN_ONLY: "true"
