@@ -8,8 +8,9 @@ Repo for the ICON Blockchain tracker containing docker scripts to setup the stac
 
 #### Sub Repos
 
+To clone all the repos, run `make pull-repos` or install [tackle-box](https://github.com/robcxyz/tackle-box) and run `tackle repos.yaml`. This is not required to setup a local tracker. 
+
 - [Frontend](https://github.com/sudoblockio/icon-tracker-frontend)
-  - To be made public after launch
 - [ETL](https://github.com/sudoblockio/icon-go-etl)
     - Main indexer for the blockchain
 - [Transformer](https://github.com/sudoblockio/icon-transformer)
@@ -22,18 +23,21 @@ Repo for the ICON Blockchain tracker containing docker scripts to setup the stac
   - Handles a number of actions for governance actions such as node uptimes and other things 
 - [Network Exporter](https://github.com/sudoblockio/icon-network-exporter)
     - Scraper for various metrics across the nodes that run the network
+- [Status Page](https://github.com/sudoblockio/icon-status-page)
+    - Status page for the network 
 
 #### Domains
 
 All data from the blockchain is normalized into the following microservices.
 
-| Service                                                          | API Docs | Status | Version | Build Status | 
-|:-----------------------------------------------------------------|:---|:---- |:---- | :---- | 
-| [Contracts](https://github.com/sudoblockio/icon-contracts)       | [Link](https://tracker.icon.geometry.io/api/v1/contracts/docs)     | ![Uptime](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsudoblockio%2Ficon-status-page%2Fmaster%2Fapi%2Fprod-mainnet-contracts-service%2Fuptime.json) | [![GitHub Release](https://img.shields.io/github/release/sudoblockio/icon-contracts.svg?style=flat)]() | ![](https://github.com/sudoblockio/icon-contracts/workflows/push-main-dockerhub/badge.svg?branch=main)
-| [Governance](https://github.com/sudoblockio/icon-governance)     | [Link](https://tracker.icon.geometry.io/api/v1/governance/docs)    | ![Uptime](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsudoblockio%2Ficon-status-page%2Fmaster%2Fapi%2Fprod-mainnet-governance-service%2Fuptime.json) | [![GitHub Release](https://img.shields.io/github/release/sudoblockio/icon-governance.svg?style=flat)]() | ![](https://github.com/sudoblockio/icon-governance/workflows/push-main-dockerhub/badge.svg?branch=main)
-| [Extractor](https://github.com/sudoblockio/icon-extractor)       | N/A |  | [![GitHub Release](https://img.shields.io/github/release/sudoblockio/icon-extractor.svg?style=flat)]() | ![](https://github.com/sudoblockio/icon-extractor/workflows/push-main-dockerhub/badge.svg?branch=main)
-| [Transformer](https://github.com/sudoblockio/icon-transformer)   | [Link](https://tracker.icon.geometry.io/api/v1/metrics/docs)       | ![Uptime](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsudoblockio%2Ficon-status-page%2Fmaster%2Fapi%2Fprod-mainnet-metrics-service%2Fuptime.json) | [![GitHub Release](https://img.shields.io/github/release/sudoblockio/icon-transformer.svg?style=flat)]() | ![](https://github.com/sudoblockio/icon-transformer/workflows/push-main-dockerhub/badge.svg?branch=main)
-| [Go-API](https://github.com/sudoblockio/icon-go-api)             | [Link](https://tracker.icon.geometry.io/api/v1/metrics/docs)       | ![Uptime](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsudoblockio%2Ficon-status-page%2Fmaster%2Fapi%2Fprod-mainnet-metrics-service%2Fuptime.json) | [![GitHub Release](https://img.shields.io/github/release/sudoblockio/icon-go-api.svg?style=flat)]() | ![](https://github.com/sudoblockio/icon-go-api/workflows/push-main/badge.svg?branch=main)
+| Service                                                          | API Docs                                                        | Status                                                                                                                                                                                 | Version | Build Status | 
+|:-----------------------------------------------------------------|:----------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---- | :---- | 
+| [Contracts](https://github.com/sudoblockio/icon-contracts)       | [Link](https://tracker.icon.community/api/v1/contracts/docs)    | ![Uptime](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsudoblockio%2Ficon-status-page%2Fmaster%2Fapi%2Fprod-mainnet-contracts-service%2Fuptime.json)  | [![GitHub Release](https://img.shields.io/github/release/sudoblockio/icon-contracts.svg?style=flat)]() | ![](https://github.com/sudoblockio/icon-contracts/workflows/push-main-dockerhub/badge.svg?branch=main)
+| [Governance](https://github.com/sudoblockio/icon-governance)     | [Link](https://tracker.icon.geometry.io/api/v1/governance/docs) | ![Uptime](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsudoblockio%2Ficon-status-page%2Fmaster%2Fapi%2Fprod-mainnet-governance-service%2Fuptime.json) | [![GitHub Release](https://img.shields.io/github/release/sudoblockio/icon-governance.svg?style=flat)]() | ![](https://github.com/sudoblockio/icon-governance/workflows/push-main-dockerhub/badge.svg?branch=main)
+| [Extractor](https://github.com/sudoblockio/icon-extractor)       | N/A                                                             |                                                                                                                                                                                        | [![GitHub Release](https://img.shields.io/github/release/sudoblockio/icon-extractor.svg?style=flat)]() | ![](https://github.com/sudoblockio/icon-extractor/workflows/push-main/badge.svg?branch=main)
+| [Transformer](https://github.com/sudoblockio/icon-transformer)   | [Link](https://tracker.icon.geometry.io/api/v1/metrics/docs)    | ![Uptime](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsudoblockio%2Ficon-status-page%2Fmaster%2Fapi%2Fprod-mainnet-api%2Fuptime.json)                 | [![GitHub Release](https://img.shields.io/github/release/sudoblockio/icon-transformer.svg?style=flat)]() | ![](https://github.com/sudoblockio/icon-transformer/workflows/push-main/badge.svg?branch=main)
+| [Go-API](https://github.com/sudoblockio/icon-go-api)             | [Link](https://tracker.icon.geometry.io/api/v1/metrics/docs)    | ![Uptime](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsudoblockio%2Ficon-status-page%2Fmaster%2Fapi%2Fprod-mainnet-api%2Fuptime.json)                | [![GitHub Release](https://img.shields.io/github/release/sudoblockio/icon-go-api.svg?style=flat)]() | ![](https://github.com/sudoblockio/icon-go-api/workflows/push-main/badge.svg?branch=main)
+
 
 #### Websockets
 
@@ -113,37 +117,35 @@ If you are running on a single host without an external firewall, be mindful tha
 
 For the best performance, it is important that you tune the postgres database per the specs of the node you are running the application on. To do this, go to [https://pgtune.leopard.in.ua/](https://pgtune.leopard.in.ua/), enter your specs, and put the output into a file called `postgresql.conf` in the root of this repo.  The file should be mounted into the PG container and the specs will be reflected in the PG exporter.
 
-### Database Index Optimization
-
-Most of the indexes are created automatically with Gorm (Go) and Alembic (Python) though currently at least one needs to added manually. See [sudoblockio/icon-transformer/issues/31](https://github.com/sudoblockio/icon-transformer/issues/31).
-
-In transformer DB -> transaction_by_address table
-```sql
-create index transaction_by_addresses_idx_address_block_number_index
-    on transaction_by_addresses (address asc, block_number desc);
-```
-
 ### Running the application
 
 After customizing the `.env` file from previous step, simply run the following command:
 
 ```shell
-make up-full 
-make ps-full  # See status of stack 
+make up  # See status of stack 
 ```
 
-Additionally, you may want to run admin consoles such as pgadmin (postgres) and control-center (kafka). To do that, run the command in the makefile manually with an additional `-f docker-compose.admin.yml`.  Same for an ICON node if you want to run a local version (`-f docker-compose.node.yml`).
+Or with tackle-box:
 
-Note that public endpoints should be ok for you to sync off of but if you want to run your own sandboxed environment, the local icon node should be used.
+```shell
+tackle docker 
+```
+
+Note that public endpoints are ok to stay at head or sync a small number of blocks but if you need to sync a whole network then it is strongly recommended to run a local node. Get in touch if you need help with that. 
 
 ### Recovering Redis
 
 The API uses redis under the hood to improve query performance for counts. It is possible recover the cache by running `-f docker-compose.redis-recovery.yml`
 
+```shell
+docker-compose docker-stack.yml -f docker-compose.redis-recovery.yml
+```
 
 ### Filling in Missing Blocks
 
 It is possible to miss blocks in the backend so to fill them in, there is a process to discover missing blocks, re-extract them, and process them so that they are properly stored in the backend.
+
+> Generally the chain syncs without having to run this. This is only to validate / fill in potential areas that didn't sync properly. 
 
 To run the process, add an additional `-f docker-compose.find-missing.yml` to the makefile command.  A table will be created and internally it will call the extractor service to pull those blocks.
 
@@ -155,6 +157,9 @@ Missing blocks can come from the following general reasons:
 
 Generally speaking, when a block is processed it is fully processed but a process still exists to make sure the DB is 100% complete.
 
+```shell
+docker-compose docker-stack.yml -f docker-compose.find-missing.yml
+```
 
 ## Usage
 
@@ -165,7 +170,6 @@ this, run the following.
 make help 
 make pull-repos 
 make up 
-make test
 ```
 
 Produces a file `docker-stack.yml` which you can:
