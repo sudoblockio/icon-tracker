@@ -1,0 +1,85 @@
+
+pull_repos<-:
+  help: Pull all the sub repos
+  repos:
+    ->: meta_repo
+    git_org: sudoblockio
+    command: "{{select(choices=['clone','pull'])}}"
+    repo_tree:
+      frontend: icon-tracker-frontend
+      extractor: icon-extractor
+      transformer: icon-transformer
+      api: icon-go-api
+      contracts: icon-contracts
+      governance: icon-governance
+      exporter: icon-network-exporter
+      status-page: icon-status-page
+
+docker<-:
+  help: Run docker stack
+  args: ['action']
+  exec:
+    create->: docker.stack
+    action->: select --choices ['up','down']
+    do:
+      ->: match action
+      case:
+        up->: docker.up
+        down->: docker.down
+
+  stack<-:
+    help: Create a docker stack
+    files:
+      ->: checkbox Which components to run? --checked
+      choices:
+        - docker-compose.yml
+        - docker-compose.admin.yml
+        - docker-compose.db.yml
+        - docker-compose.exporters.yml
+        - docker-compose.traefik.yml
+    cmd->: os_system "COMPOSE_FILE=./{{join(files,':./')}} docker-compose config > docker-stack.yml"
+
+  up<-:
+    exec<-:
+      cmd: docker-compose -f docker-stack.yml up -d
+      print->: print 'Running command:{{cmd}}'
+      run->: os_system "{{cmd}}"
+
+  down<-:
+    exec<-:
+      cmd: docker-compose -f docker-stack.yml down
+      print->: print 'Running command:{{cmd}}'
+      run->: os_system "{{cmd}}"
+
+
+
+#[//]: # (--start--Table regen)
+#[//]: # (--end--)
+
+#TODO: WIP
+readme<-:
+  help: Updates the readme tables
+  exec:
+    repos:
+      - name: Transformer
+        repo_name: icon-transformer
+        api_docs: https://tracker.icon.community/api/v1/docs/
+        workflow: push-main
+      - name: Contracts
+        repo_name: icon-contracts
+        api_docs: https://tracker.icon.community/api/v1/contracts/docs
+        workflow: push-main
+      - name: Governance
+        url: icon-governance
+        api_docs: https://tracker.icon.community/api/v1/governance/docs
+        workflow: push-main
+      - name: Extractor
+        url: icon-extractor
+        api_docs:
+        workflow: push-main
+
+    data_>:
+      for: repos
+      service->: var [{{name}}](https://github.com/sudoblockio/{{repo_name}})
+      uptime->: var ![Uptime](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsudoblockio%2Ficon-status-page%2Fmaster%2Fapi%2Fprod-mainnet-api%2Fuptime.json)
+    d->: debug

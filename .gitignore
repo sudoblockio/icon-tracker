@@ -28,7 +28,10 @@ extractor
 transformer
 api
 
+# Other
 volumes
+icon-tracker-docker
+
 
 # Old
 .backend
