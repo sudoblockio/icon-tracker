@@ -15,7 +15,7 @@ To clone all the repos, run `make pull-repos` or install [tackle-box](https://gi
     - Main indexer for the blockchain
 - [Transformer](https://github.com/sudoblockio/icon-transformer)
     - Transform the blocks into usable tables
-- [API](https://github.com/sudoblockio/icon-api)
+- [API](https://github.com/sudoblockio/icon-go-api)
     - Expose the data for querying
 - [Contracts](https://github.com/sudoblockio/icon-contracts)
   - Handles special actions for contracts such as classifications, verifications, and uploading source code 
