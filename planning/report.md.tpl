@@ -1,26 +1,27 @@
 # Tracker Monthly Report
 
-Progress report for {{month}}/2022
+This is a progress update for {{month}}/2022 on infrastructure provided by sudoblock including development of the tracker, indexer, and operation of RPC endpoints being used to support the ICON ecosystem.
 
-### Issue Summary
+### Summary
 
 [Brief summary of month's progress]
 {% for r in repos %}
-### {{ r.name }}
+### [{{ r.name }}]({{ r.url }})
 
 #### Closed Issues
 
 | Number | Name | Status | Created | Notes |
-| --- | --- | --- | --- | --- | {% for i in r.open_issues %}
-| [{{ i.number }}]({{ i.url }}) | {{ i.title }} | {{ i.state }} | {{ i.created_at }} | | {% endfor %}
+| --- | --- | --- | --- | --- |{% for i in r.closed_issues %}
+| [{{ i.number }}]({{ i.html_url }}) | {{ i.title }} | {{ i.state }} | {{ i.created_at }} | | {% endfor %}
 | | | | | |
 
 #### Open Issues
 
 | Number | Name | Status | Created | Notes |
-| --- | --- | --- | --- | --- |{% for i in r.closed_issues %}
-| [{{ i.number }}]({{ i.url }}) | {{ i.title }} | {{ i.state }} | {{ i.created_at }} | | {% endfor %}
-| | | | | |{% endfor %}
+| --- | --- | --- | --- | --- | {% for i in r.open_issues %}
+| [{{ i.number }}]({{ i.html_url }}) | {{ i.title }} | {{ i.state }} | {{ i.created_at }} | | {% endfor %}
+| | | | | |
+{% endfor %}
 
 ## Downtime Incidents
 

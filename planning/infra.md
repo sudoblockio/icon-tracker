@@ -4,7 +4,7 @@ Doc to summarize major changes to the infrastructure for the tracker and associa
 
 ## Improved Logging with Alarms 
 
-Current logging is not hooked up with any kind of alarm system. While we do have alarms setup on critical metrics that inform overall system health such as monitoring processing of blocks, it does not capture things such as DB issues. External API status codes are pinged which alarms are setup for but would be really helpful to be able to get an index of all status codes. 
+Current logging is not hooked up with any kind of alarm system. While we do have alarms setup on critical metrics that inform overall system health such as monitoring processing of blocks, it does not capture things such as DB issues. External API status codes are pinged which alarms are set up for but would be really helpful to be able to get an index of all status codes along with origins to get stats on endpoint usage. 
 
 ## Migrate to K8s to Bare Metal 
 
@@ -35,5 +35,3 @@ Challenges:
 
 - Would need to deploy own masters. Not something very hard to do but would need to figure out some networking things and aspects of deployment / management of masters 
 - Need to deploy CSI driver to subdivide PVCs 
-
-

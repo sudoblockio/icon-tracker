@@ -4,24 +4,28 @@
 
   exec:
     repo_names:
+#      - owner: sudoblockio
+#        repo: icon-tracker-frontend
+#      - owner: sudoblockio
+#        repo: icon-transformer
+#      - owner: sudoblockio
+#        repo: icon-go-api
+#      - owner: sudoblockio
+#        repo: icon-contracts
+#      - owner: sudoblockio
+#        repo: icon-governance
       - owner: sudoblockio
-        repo: icon-tracker-frontend
-      - owner: sudoblockio
-        repo: icon-transformer
-      - owner: sudoblockio
-        repo: icon-go-api
-      - owner: sudoblockio
-        repo: icon-contracts
-      - owner: sudoblockio
-        repo: icon-governance
+        repo: icon-tracker
 
-    month->: input What number month are you writing report (ie Feb=2)?
+    month->: input What number month are you writing report in ISO format (ie Feb=02)?
 
     repos->:
       for: repo_names
       name->: {{item.repo}}
       url->: https://github.com/{{item.owner}}/{{item.repo}}
-      open_issues->: http_get https://api.github.com/repos/{{item.owner}}/{{item.repo}}/issues?state=open&since=2022-{{month}}-01T00:00:00Z
-      closed_issues->: http_get https://api.github.com/repos/{{item.owner}}/{{item.repo}}/issues?state=closed&since=2022-{{month}}-01T00:00:00Z
+      closed_issues->: http_get https://api.github.com/repos/{{item.owner}}/{{item.repo}}/issues?state=closed&since=2022-{{month}}-01T00:00:00Z&per_page=100
+      open_issues->: http_get https://api.github.com/repos/{{item.owner}}/{{item.repo}}/issues?state=open&since=2022-{{month}}-01T00:00:00Z&per_page=100
+#      closed_issues->: print https://api.github.com/repos/{{item.owner}}/{{item.repo}}/issues?state=closed&since=2022-{{month}}-01T00:00:00Z&per_page=100
+#      open_issues->: print https://api.github.com/repos/{{item.owner}}/{{item.repo}}/issues?state=open&since=2022-{{month}}-01T00:00:00Z&per_page=100
 
     gen->: generate report.md.tpl report.md
