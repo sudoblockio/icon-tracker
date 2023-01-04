@@ -4,28 +4,34 @@
 
   exec:
     repo_names:
-#      - owner: sudoblockio
-#        repo: icon-tracker-frontend
-#      - owner: sudoblockio
-#        repo: icon-transformer
-#      - owner: sudoblockio
-#        repo: icon-go-api
-#      - owner: sudoblockio
-#        repo: icon-contracts
-#      - owner: sudoblockio
-#        repo: icon-governance
+      - owner: sudoblockio
+        repo: icon-tracker-frontend
+      - owner: sudoblockio
+        repo: icon-transformer
+      - owner: sudoblockio
+        repo: icon-go-api
+      - owner: sudoblockio
+        repo: icon-contracts
+      - owner: sudoblockio
+        repo: icon-governance
       - owner: sudoblockio
         repo: icon-tracker
 
     month->: input What number month are you writing report in ISO format (ie Feb=02)?
+    day->: input What day to run till in ISO format (ie->01)? --default 01
 
     repos->:
       for: repo_names
       name->: {{item.repo}}
       url->: https://github.com/{{item.owner}}/{{item.repo}}
-      closed_issues->: http_get https://api.github.com/repos/{{item.owner}}/{{item.repo}}/issues?state=closed&since=2022-{{month}}-01T00:00:00Z&per_page=100
-      open_issues->: http_get https://api.github.com/repos/{{item.owner}}/{{item.repo}}/issues?state=open&since=2022-{{month}}-01T00:00:00Z&per_page=100
-#      closed_issues->: print https://api.github.com/repos/{{item.owner}}/{{item.repo}}/issues?state=closed&since=2022-{{month}}-01T00:00:00Z&per_page=100
-#      open_issues->: print https://api.github.com/repos/{{item.owner}}/{{item.repo}}/issues?state=open&since=2022-{{month}}-01T00:00:00Z&per_page=100
+
+      closed_issues_link->: var https://api.github.com/repos/{{item.owner}}/{{item.repo}}/issues?state=closed&since=2022-{{month}}-{{day}}T00:00:00Z&per_page=100
+      open_issues_link->: var https://api.github.com/repos/{{item.owner}}/{{item.repo}}/issues?state=open&since=2022-{{month}}-{{day}}T00:00:00Z&per_page=100
+
+      closed_issues_info->: print Getting {{closed_issues_link}}
+      open_issues_info->: print Getting {{open_issues_link}}
+
+      closed_issues->: http_get {{closed_issues_link}}
+      open_issues->: http_get {{open_issues_link}}
 
     gen->: generate report.md.tpl report.md
