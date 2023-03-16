@@ -4,7 +4,7 @@
 
 Repo for the ICON Blockchain tracker containing docker scripts to setup the stack.
 
-[Status Page](https://status.icon.sudoblock.io)
+[Status Page](https://tracker.status.icon.community)
 
 #### Sub Repos
 
