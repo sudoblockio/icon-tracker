@@ -19,7 +19,7 @@ To clone all the repos, run `make pull-repos` or install [tackle-box](https://gi
     - Expose the data for querying
 - [Contracts](https://github.com/sudoblockio/icon-contracts)
   - Handles special actions for contracts such as classifications, verifications, and uploading source code 
-- [Governance](https://github.com/sudoblockio/icon-contracts)
+- [Governance](https://github.com/sudoblockio/icon-governance)
   - Handles a number of actions for governance actions such as node uptimes and other things 
 - [Network Exporter](https://github.com/sudoblockio/icon-network-exporter)
     - Scraper for various metrics across the nodes that run the network
